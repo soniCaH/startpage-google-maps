@@ -1,9 +1,7 @@
 /**
  * @file
  * Startpage JavaScript functionality. Including Maps, Travel Time etc...
- */ 
-
-'use strict';
+ */
 
 /**
   * @var color
@@ -23,7 +21,7 @@ var map = null;
  * @var last_position
  *   Store the last geolocated position.
  */
-var last_position
+var last_position;
 
 /**
  * @var image_user
@@ -112,55 +110,60 @@ var traffic_layer;
 var directions_service;
 
 function initMap() {
-  // Check if localStorage is accessible in the browser.
-  if (typeof(Storage) !== "undefined") {
-    // Retrieve last stored geolocation.
-    last_position = localStorage.getItem("start_last_position");
+  // Check if this is the first time we call initMap.
+  // If so, create a new map and render it.
+  // Otherwise, we just update our locations.
+  if (!map) {
+    // Check if localStorage is accessible in the browser.
+    if (typeof(Storage) !== "undefined") {
+      // Retrieve last stored geolocation.
+      last_position = localStorage.getItem("start_last_position");
+      
+      // Check if there is a last stored location.
+      if (last_position) {
+        last_position = JSON.parse(last_position);
+        // Create a map, centered on the last known position.
+        map = new google.maps.Map(map_element, {
+          center: last_position,
+          zoom: 11,
+        });
     
-    // Check if there is a last stored location.
-    if (last_position) {
-      last_position = JSON.parse(last_position);
-      // Create a map, centered on the last known position.
-      map = new google.maps.Map(map_element, {
-        center: last_position,
-        zoom: 11,
-      });
-  
-      // Pin a marker on the current location.
-      marker_actual = new google.maps.Marker({
-        position: last_position,
-        map: map,
-        title: 'CURRENTLY',
-        icon: image_user
-      });
+        // Pin a marker on the current location.
+        marker_actual = new google.maps.Marker({
+          position: last_position,
+          map: map,
+          title: 'CURRENTLY',
+          icon: image_user
+        });
+      }
+      else {
+        // Center the map on our "home" coordinates.
+        map = new google.maps.Map(map_element, {
+          center: {lat: 51.0167, lng: 4.4667},
+          zoom: 11,
+        });
+      }
     }
-    else {
-      // Center the map on our "home" coordinates.
-      map = new google.maps.Map(map_element, {
-        center: {lat: 51.0167, lng: 4.4667},
-        zoom: 11,
-      });
-    }
+    
+    // Apply color settings to the map object.
+    map.setOptions({styles: map_style});
+    
+    // Initialize a maker on the "HOME" geolocation.
+    marker_home = new google.maps.Marker({
+      position: myLatLng_home,
+      map: map,
+      title: 'HOME',
+      icon: image_home
+    });
+    
+    // Initialize a maker on the "WORK" geolocation.
+    marker_work = new google.maps.Marker({
+      position: myLatLng_work,
+      map: map,
+      title: 'AMPLEXOR HEVERLEE',
+      icon: image_work
+    });
   }
-  
-  // Apply color settings to the map object.
-  map.setOptions({styles: map_style});
-  
-  // Initialize a maker on the "HOME" geolocation.
-  marker_home = new google.maps.Marker({
-    position: myLatLng_home,
-    map: map,
-    title: 'HOME',
-    icon: image_home
-  });
-  
-  // Initialize a maker on the "WORK" geolocation.
-  marker_work = new google.maps.Marker({
-    position: myLatLng_work,
-    map: map,
-    title: 'AMPLEXOR HEVERLEE',
-    icon: image_work
-  });
   
   // Initialize a "Current traffic" layer and assign it to our map.
   traffic_layer = new google.maps.TrafficLayer();
@@ -188,7 +191,7 @@ function initMap() {
       });
 
       // Re-center our map to our geolocation.
-      map.setCenter(pos);
+      map.panTo(pos);
       
       // Check if the "HOME" and "CURRENT" markers are not too close to each other.
       distance_to_home = getDistance(pos, myLatLng_home);
@@ -200,7 +203,7 @@ function initMap() {
       // Store geolocation in localStorage.
       localStorage.setItem("start_last_position", JSON.stringify(pos));
       
-      directions_service = new google.maps.DirectionsService;
+      directions_service = new google.maps.DirectionsService();
       
       calculateAndDisplayRoute(routes_element, directions_service, pos.lat+','+pos.lng, home_address_string);
       
@@ -218,7 +221,7 @@ function initMap() {
       initMap();
     },
     // 5 Minutes = 30.000ms (5 * 60 * 1000).
-    300000
+    30000
   );
 }
 
