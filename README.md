@@ -1,8 +1,12 @@
 # Personal startpage
 
-Markers added for HOME, WORK (AMPLEXOR Heverlee) and your actual geolocation (if allowed)
+Markers added for HOME, WORK (AMPLEXOR Heverlee) and your actual geolocation (if allowed).
 
-# Installation
+If you are not at home, you will get travel times (and distance) indicators to home.
+
+![Startpage screenshot](/screenshot.png)
+
+# Development
 
 Install dependencies
 
@@ -13,6 +17,8 @@ Build dist folder
 `gulp build`
 
 # Configuration
+
+Edit `index.html` to change your name, obviously ;-)
 
 Currently set to my own house (geolocation and address).
 Change `src/scripts/app.js` to your needs:
