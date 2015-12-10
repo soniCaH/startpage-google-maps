@@ -179,6 +179,7 @@ function initMap() {
       };
       
       var distance_to_home = 0;
+      var distance_to_work = 0;
       
       // Reset our marker.
       marker_actual.setMap(null);
@@ -198,6 +199,13 @@ function initMap() {
       
       if (distance_to_home < 500) {
         marker_home.setMap(null);
+      }
+      
+      // Check if the "WORK" and "CURRENT" markers are not too close to each other.
+      distance_to_work = getDistance(pos, myLatLng_work);
+      
+      if (distance_to_work < 500) {
+        marker_work.setMap(null);
       }
   
       // Store geolocation in localStorage.
