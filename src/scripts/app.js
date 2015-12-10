@@ -206,6 +206,8 @@ function initMap() {
       
       if (distance_to_work < 500) {
         marker_work.setMap(null);
+        var extra = document.getElementById('extra_welcome');
+        extra.textContent = ", happy work day!";
       }
   
       // Store geolocation in localStorage.
