@@ -73,13 +73,13 @@ var marker_actual;
  * @var myLatLng_home
  *   Latitude and Longitute for "Home".
  */
-var myLatLng_home = {lat: 50.996039, lng: 4.477497};
+var myLatLng_home = {lat: 50.964403, lng: 4.504431};
 
 /**
  * @var home_address_string
  *   String version of my home address (travel info destination point).
  */
-var home_address_string = "Geerdegemstraat+111B,+2800+Mechelen,+Belgium";
+var home_address_string = "Vekestraat+65B,+1982+Elewijt,+Belgium";
 
 /**
  * @var marker_home
@@ -123,7 +123,7 @@ function initMap() {
       // Create a map, centered on the last known position.
       map = new google.maps.Map(map_element, {
         center: last_position,
-        zoom: 11,
+        zoom: 12,
       });
   
       // Pin a marker on the current location.
@@ -138,7 +138,7 @@ function initMap() {
       // Center the map on our "home" coordinates.
       map = new google.maps.Map(map_element, {
         center: {lat: 51.0167, lng: 4.4667},
-        zoom: 11,
+        zoom: 12,
       });
     }
   }
@@ -178,7 +178,7 @@ function initMap() {
       var distance_to_home = 0;
       
       // Reset our marker.
-      marker_actual.setMap(null);
+      marker_actual ? marker_actual.setMap(null) : '';
       // Create a new marker on our geolocation.
       marker_actual = new google.maps.Marker({
         position: pos,
@@ -205,7 +205,7 @@ function initMap() {
       calculateAndDisplayRoute(routes_element, directions_service, pos.lat+','+pos.lng, home_address_string);
       
       // var transitHTML = document.getElementById('transit');
-      // calculateAndDisplayTransit(transitHTML, directions_service, pos.lat+','+pos.lng, "Geerdegemstraat+111B,+2800+Mechelen,+Belgium");
+      // calculateAndDisplayTransit(transitHTML, directions_service, pos.lat+','+pos.lng, "Vekestraat+65B,+1982+Elewijt,+Belgium");
       
     }, function() {
       // Handle situation where no geolocation is found.
